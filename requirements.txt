@@ -7,3 +7,5 @@ matplotlib
 seaborn
 shap
 streamlit
+fastapi
+uvicorn
