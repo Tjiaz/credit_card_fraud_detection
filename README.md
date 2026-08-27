@@ -1,6 +1,41 @@
 # credit_card_fraud_detection
 
 📘 Credit Card Fraud Detection — End‑to‑End Machine Learning System
+
+<p align="center">
+
+  <!-- Python -->
+  <img src="https://img.shields.io/badge/Python-3.10-blue?logo=python&logoColor=white" />
+
+  <!-- PyTorch -->
+  <img src="https://img.shields.io/badge/PyTorch-2.0-EE4C2C?logo=pytorch&logoColor=white" />
+
+  <!-- XGBoost -->
+  <img src="https://img.shields.io/badge/XGBoost-1.7.6-0095D5?logo=xgboost&logoColor=white" />
+
+  <!-- FastAPI -->
+  <img src="https://img.shields.io/badge/FastAPI-0.110-009688?logo=fastapi&logoColor=white" />
+
+  <!-- Streamlit -->
+  <img src="https://img.shields.io/badge/Streamlit-1.32-FF4B4B?logo=streamlit&logoColor=white" />
+
+  <!-- License -->
+  <img src="https://img.shields.io/badge/License-MIT-green" />
+
+  <!-- Status -->
+  <img src="https://img.shields.io/badge/Status-Production%20Ready-brightgreen" />
+
+  <!-- Build -->
+  <img src="https://img.shields.io/badge/Build-Passing-success?logo=github-actions&logoColor=white" />
+
+  <!-- Issues -->
+  <img src="https://img.shields.io/github/issues/Tjiaz/fraud_detection" />
+
+  <!-- Stars -->
+  <img src="https://img.shields.io/github/stars/Tjiaz/fraud_detection?style=social" />
+
+</p>
+
 🔍 Overview
 This project is a production‑ready fraud detection system built using:
 
