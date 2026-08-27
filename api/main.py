@@ -91,6 +91,11 @@ def compute_anomaly_score(model, X):
 # -----------------------------
 # API Endpoint
 # -----------------------------
+
+@app.get("/")
+def home():
+    return {"message": "Fraud Detection API is running"}
+
 @app.post("/predict")
 def predict(transaction: Transaction):
     # Convert input to numpy array
