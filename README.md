@@ -1,85 +1,122 @@
 # Credit Card Fraud Detection
 
-A production-style credit card fraud detection project that combines an unsupervised autoencoder with a supervised XGBoost classifier to detect suspicious transactions in a highly imbalanced dataset.
+A hybrid fraud detection system combining a PyTorch autoencoder for anomaly detection and an XGBoost classifier for final prediction. The project is designed for the highly imbalanced credit card fraud dataset and includes preprocessing, feature engineering, model training, evaluation, an API, and a Streamlit dashboard.
 
-This repository demonstrates an end-to-end ML workflow for fraud detection, including data preprocessing, feature engineering, model training, evaluation, a FastAPI prediction service, and a Streamlit dashboard.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10+-blue?logo=python&logoColor=white" alt="Python" />
+  <img src="https://img.shields.io/badge/PyTorch-2.x-orange?logo=pytorch&logoColor=white" alt="PyTorch" />
+  <img src="https://img.shields.io/badge/XGBoost-1.x-green?logo=xgboost&logoColor=white" alt="XGBoost" />
+  <img src="https://img.shields.io/badge/FastAPI-0.110+-009688?logo=fastapi&logoColor=white" alt="FastAPI" />
+  <img src="https://img.shields.io/badge/Streamlit-1.x-red?logo=streamlit&logoColor=white" alt="Streamlit" />
+</p>
 
 ## Overview
 
-Credit card fraud detection is a classic anomaly detection and class imbalance problem. In this project:
+Credit card fraud detection is a challenging machine learning problem because fraudulent transactions are a small fraction of total activity. This project addresses that imbalance using a two-stage approach:
 
-- An autoencoder is trained on normal transactions to learn the expected pattern of legitimate behavior.
-- Reconstruction error is used as an anomaly score.
-- Engineered behavioral and statistical features are added to improve detection quality.
-- A hybrid XGBoost classifier is trained using both engineered features and the anomaly score.
-- The trained models are served through an API and can be explored through a dashboard.
+1. Autoencoder-based anomaly detection
+   - The model learns the pattern of normal transactions.
+   - Transactions with large reconstruction errors are treated as suspicious.
+
+2. Hybrid supervised classification
+   - Engineered behavioral and statistical features are added.
+   - An XGBoost model is trained using these features plus the autoencoder anomaly score.
+
+This makes the system more robust than relying on a single classifier or a pure anomaly detector.
 
 ## Features
 
-- Data preprocessing and scaling for imbalanced fraud datasets
-- Feature engineering using transaction behavior and amount statistics
-- PyTorch autoencoder for anomaly detection
-- XGBoost classifier for final fraud prediction
-- Model evaluation with classification metrics and plots
-- FastAPI inference endpoint
+- Data preprocessing and feature scaling
+- Behavioral feature engineering
+- Statistical feature engineering
+- Autoencoder training in PyTorch
+- XGBoost fraud classification
+- Model evaluation with standard metrics and plots
+- FastAPI prediction endpoint
 - Streamlit dashboard for interactive predictions
-- Saved trained model artifacts in the `models/` directory
+- Saved trained model artifacts under `models/`
 
-## Project Structure
+## Tech Stack
+
+- Python
+- PyTorch
+- XGBoost
+- scikit-learn
+- pandas
+- NumPy
+- Matplotlib
+- Seaborn
+- SHAP
+- FastAPI
+- Streamlit
+
+## Repository Structure
 
 ```text
 credit_card_fraud_detection/
 ├── api/
-│   └── main.py                  # FastAPI service for fraud prediction
+│   └── main.py                 # FastAPI app for fraud prediction
 ├── dashboard/
-│   └── app.py                  # Streamlit dashboard
+│   └── app.py                 # Streamlit dashboard
 ├── data/
 │   ├── raw/
-│   │   └── creditcard.csv      # Kaggle credit card dataset (not included in repo)
+│   │   └── creditcard.csv      # Kaggle dataset (required)
 │   └── processed/
 │       ├── scaled_data.npy
 │       ├── labels.npy
 │       └── engineered_features.npy
 ├── models/
 │   ├── autoencoder.pt          # Trained autoencoder weights
-│   ├── xgboost.json            # Trained XGBoost model
-│   └── evaluation_plots/       # Generated evaluation plots
+│   ├── xgboost.json           # Trained XGBoost model
+│   └── evaluation_plots/      # Plots generated during evaluation
 ├── src/
-│   ├── data_preprocessing.py  # Scaling and data prep
-│   ├── feature_engineering.py  # Engineered transaction features
-│   ├── model_training.py       # Autoencoder + XGBoost training pipeline
-│   ├── evaluation.py           # Metrics, ROC/PR curves, SHAP analysis
-│   ├── utils.py               # Utility placeholder
+│   ├── data_preprocessing.py  # Scaling and preprocessing pipeline
+│   ├── feature_engineering.py  # Behavioral/statistical feature creation
+│   ├── model_training.py       # Autoencoder + XGBoost training workflow
+│   ├── evaluation.py           # Metrics and visualization
+│   ├── utils.py               # Utility file placeholder
 │   └── models/
 │       └── autoencoder.py     # Autoencoder architecture
 ├── .gitignore
 ├── requirements.txt
 ├── main.py
 ├── README.md
-└── LICENSE (if added later)
+└── LICENSE                    # optional if added later
 ```
 
 ## Dataset
 
-This project is designed for the Kaggle credit card fraud detection dataset:
+This project uses the Kaggle credit-card fraud detection dataset.
 
-- Dataset name: Credit Card Fraud Detection
-- Source: Kaggle
+- Dataset: `creditcard.csv`
 - Rows: 284,807
 - Fraudulent transactions: 492
-- Highly imbalanced, making it a strong real-world fraud detection benchmark
+- Class imbalance: extremely high
 
-Place the dataset in:
+The dataset should be placed in:
 
-```text
+```bash
 data/raw/creditcard.csv
 ```
 
-If the file is missing, the pipeline will raise a `FileNotFoundError`.
+If the file is not present, the scripts will raise a `FileNotFoundError`.
 
-## Requirements
+## Installation
 
-Python 3.10+ is recommended.
+Clone the repository:
+
+```bash
+git clone https://github.com/Tjiaz/credit_card_fraud_detection.git
+cd credit_card_fraud_detection
+```
+
+Create a virtual environment (recommended):
+
+```bash
+python -m venv .venv
+source .venv/bin/activate   # Linux/macOS
+# .venv\Scripts\activate    # Windows
+```
 
 Install dependencies:
 
@@ -87,46 +124,27 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-Core packages include:
+## Getting Started
 
-- pandas
-- numpy
-- scikit-learn
-- torch
-- xgboost
-- matplotlib
-- seaborn
-- shap
-- fastapi
-- streamlit
-- uvicorn
-
-## Quick Start
-
-### 1. Prepare the dataset
-
-Download the Kaggle dataset and save it to:
-
-```bash
-mkdir -p data/raw
-# place creditcard.csv in data/raw/
-```
-
-### 2. Run preprocessing
+### 1. Preprocess the data
 
 ```bash
 python src/data_preprocessing.py
 ```
 
-This creates scaled feature arrays and labels in `data/processed/`.
+This script:
+- loads the raw dataset
+- separates features and labels
+- scales the features
+- saves processed arrays to `data/processed/`
 
-### 3. Run feature engineering
+### 2. Run feature engineering
 
 ```bash
 python src/feature_engineering.py
 ```
 
-This adds transaction behavior features such as:
+This adds engineered features such as:
 
 - `Time_diff`
 - `Rolling_count_1h`
@@ -135,42 +153,40 @@ This adds transaction behavior features such as:
 - `Amount_zscore`
 - `Amount_log`
 
-### 4. Train the models
+### 3. Train the models
 
 ```bash
 python src/model_training.py
 ```
 
 This trains:
+- the PyTorch autoencoder on legitimate transactions
+- the XGBoost classifier using engineered features plus anomaly score
 
-- the autoencoder on legitimate transactions
-- the XGBoost model using engineered features plus anomaly scores
+The trained model files are saved in the `models/` directory.
 
-The trained artifacts are saved in `models/`.
-
-### 5. Evaluate the model
+### 4. Evaluate the model
 
 ```bash
 python src/evaluation.py
 ```
 
-This generates evaluation outputs such as:
-
+This generates evaluation outputs including:
 - confusion matrix
 - ROC curve
 - precision-recall curve
-- anomaly score distribution
+- anomaly distribution plot
 - SHAP summary plot
 
-## Run the API
+## Running the API
 
-Start the FastAPI server:
+Start the FastAPI application:
 
 ```bash
 uvicorn api.main:app --reload
 ```
 
-Then open the docs at:
+Then open:
 
 ```text
 http://127.0.0.1:8000/docs
@@ -221,38 +237,50 @@ curl -X POST "http://127.0.0.1:8000/predict" \
   }'
 ```
 
-## Run the Dashboard
+The API returns:
+
+```json
+{
+  "anomaly_score": 0.0123,
+  "fraud_probability": 0.89,
+  "fraud_prediction": 1,
+  "status": "fraud"
+}
+```
+
+## Running the Dashboard
+
+Launch the Streamlit app:
 
 ```bash
 streamlit run dashboard/app.py
 ```
 
-The dashboard allows interactive transaction inspection and displays:
-
+The dashboard allows you to input a transaction and inspect:
 - anomaly score
-- fraud probability
-- prediction result
-- SHAP-based feature importance
+- probability of fraud
+- fraud prediction label
+- SHAP feature importance
+- reconstruction error visualization
 
-## Model Architecture
+## Model Details
 
 ### Autoencoder
 
-The autoencoder learns the patterns of legitimate transactions by reconstructing inputs from a compressed latent representation. Transactions with large reconstruction errors are more likely to be fraudulent.
+The autoencoder is trained only on non-fraudulent data. It learns the typical structure of legitimate transactions and reconstructs them with low error. Fraudulent transactions tend to deviate from this pattern and produce a larger reconstruction error.
 
-### XGBoost classifier
+### XGBoost hybrid classifier
 
-The XGBoost model uses:
-
+The final XGBoost model uses:
 - PCA-transformed transaction features
-- engineered behavioral features
-- autoencoder anomaly score
+- engineered behavioral/statistical features
+- anomaly score from the autoencoder
 
-This hybrid approach usually performs better than using only a single model, especially when fraudulent examples are rare.
+This hybrid approach often performs better than simple logistic regression or pure anomaly detection on rare-event datasets.
 
-## Evaluation Metrics
+## Evaluation
 
-The project tracks metrics such as:
+The project evaluates its results using metrics such as:
 
 - precision
 - recall
@@ -261,28 +289,27 @@ The project tracks metrics such as:
 - confusion matrix
 - precision-recall curve
 
-These are useful because in fraud detection, false negatives can be expensive.
+Because fraud detection is imbalanced, recall and precision are especially important.
 
 ## Notes
 
-- This repo is intended as an end-to-end fraud detection prototype and learning project.
-- The raw dataset is not included in the repository and must be downloaded separately.
-- Model performance depends on the dataset, model tuning, and feature engineering choices.
+- The raw dataset is not included in the repository and must be downloaded separately from Kaggle.
+- This project is intended as an end-to-end ML prototype and learning project.
+- Model performance depends on tuning, data quality, and feature engineering choices.
 
 ## License
 
-This project is provided for educational and demonstration purposes. Add a license file if you plan to publish or share the repository publicly.
+This project is provided for educational and demonstration purposes. If you plan to distribute or publish it publicly, add an appropriate license file such as MIT.
 
 ## Contributing
 
-Contributions are welcome. Suggested improvements include:
-
-- better class imbalance handling
-- more advanced feature engineering
+Contributions are welcome. Ideas for improvement include:
+- better class-imbalance handling
 - hyperparameter tuning
-- experiment tracking and model versioning
-- deployment with Docker
+- experiment tracking with MLflow or Weights & Biases
+- model versioning
+- Docker deployment
 
 ## Contact
 
-For questions or collaboration, use the repository owner or project maintainer contact information associated with this GitHub project.
+For questions or collaboration, use the repository owner or maintainer contact details associated with this GitHub project.
